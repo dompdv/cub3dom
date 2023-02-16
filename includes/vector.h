@@ -9,6 +9,7 @@ typedef struct s_vect
 } t_vect;
 
 void vector_set(t_vect *vect, double x, double y, double z);
+void vector_set_polar(t_vect *vect, double theta, double psi, double l);
 void vector_setv(t_vect *vect, t_vect *vect2);
 void vector_add(t_vect *vect, double x, double y, double z);
 void vector_addv(t_vect *vect, t_vect *vect2);

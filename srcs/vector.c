@@ -8,6 +8,21 @@ void vector_set(t_vect *vect, double x, double y, double z)
 	vect->y = y;
 	vect->z = z;
 }
+// Theta : angle of the rotation around Z
+// Psi   : angle of rotation around after first rotation
+// l     : length of the resulting vector
+void vector_set_polar(t_vect *vect, double theta, double psi, double l)
+{
+	double ct, st, cp, sp;
+	ct = cos(theta);
+	st = sin(theta);
+	cp = cos(psi);
+	sp = sin(psi);
+
+	vect->x = l * ct * cp;
+	vect->y = l * st * cp;
+	vect->z = l * sp;
+}
 void vector_setv(t_vect *vect, t_vect *vect2)
 {
 	vect->x = vect2->x;

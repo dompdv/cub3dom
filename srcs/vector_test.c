@@ -67,4 +67,17 @@ void vector_test()
     vector_print(&v1, "reset v1");
     vector_roty(&v1, M_PI_2);
     vector_print(&v1, "After a quarter turn YZ");
+
+    vector_set_polar(&v1, 0, 0, 1);
+    vector_print(&v1, "reset v1 to polar (0,0,1)");
+    vector_set_polar(&v1, M_PI_2, M_PI_2, 3);
+    vector_print(&v1, "reset v1 to polar (PI/2,PI/2,3)");
+    vector_set_polar(&v1, M_PI_2, -M_PI_2, 3);
+    vector_print(&v1, "reset v1 to polar (PI/2,-PI/2,3)");
+    vector_set_polar(&v1, M_PI_2 / 2.0, 0, 1);
+    vector_print(&v1, "reset v1 to polar (PI/4,0,1)");
+    printf("n(v1) = %f\n", vector_norme(&v1));
+    vector_set_polar(&v1, M_PI_2 / 2.0, M_PI_2 / 2.0, 1);
+    vector_print(&v1, "reset v1 to polar (PI/4,PI/4,1)");
+    printf("n(v1) = %f\n", vector_norme(&v1));
 }
