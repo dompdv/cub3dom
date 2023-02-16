@@ -15,8 +15,8 @@ void vector_add(t_vect *vect, double x, double y, double z);
 void vector_addv(t_vect *vect, t_vect *vect2);
 void vector_scale(t_vect *vect, double l);
 double vector_scalar(t_vect *vect, t_vect *vect2);
-double vector_normes(t_vect *vect);
-double vector_norme(t_vect *vect);
+double vector_norms(t_vect *vect);
+double vector_norm(t_vect *vect);
 int vector_isnull(t_vect *vect);
 void vector_nullify(t_vect *vect);
 void vector_normalize(t_vect *vect);
@@ -24,6 +24,7 @@ void vector_rotx(t_vect *vect, double rad);
 void vector_roty(t_vect *vect, double rad);
 void vector_rotz(t_vect *vect, double rad);
 void vector_print(t_vect *vector, char *name);
+void vector_product(t_vect *v1, t_vect *v2, t_vect *result);
 void vector_test();
 
 #endif
