@@ -129,6 +129,6 @@ int main2(void)
 
 int main(void)
 {
-	vector_test();
+	test_suite_camera();
 	return 0;
 }

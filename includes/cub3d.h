@@ -6,6 +6,7 @@
 #include "../mlx/mlx.h"
 #include "../libft/libft.h"
 #include "vector.h"
+#include "camera.h"
 
 typedef struct s_data
 {
@@ -22,13 +23,6 @@ typedef struct s_color
 	int g;
 	int b;
 } t_color;
-
-typedef struct s_camera
-{
-	t_vect position;
-	t_vect direction;
-	t_vect plane;
-} t_camera;
 
 typedef struct s_window
 {
@@ -55,5 +49,8 @@ typedef struct s_world
 	t_camera camera;
 	t_textures textures;
 } t_world;
+
+void test_suite_vector();
+void test_suite_camera();
 
 #endif

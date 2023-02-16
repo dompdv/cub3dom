@@ -1,6 +1,6 @@
 NAME  = cub3D
 
-SRCS  =  srcs/main.c srcs/vector.c srcs/vector_test.c
+SRCS  =  srcs/main.c srcs/vector.c srcs/test_suite.c srcs/camera.c
 
 OBJS  = ${SRCS:.c=.o}
 

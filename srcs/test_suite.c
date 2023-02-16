@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <math.h>
 #include "../includes/vector.h"
+#include "../includes/camera.h"
 
-void vector_test()
+void test_suite_vector()
 {
     /*
     Testing Vector
@@ -34,6 +35,10 @@ void vector_test()
     n(v1) = 1.000000
     reset v1 to polar (PI/4,PI/4,1) : (0.500000, 0.500000, 0.707107)
     n(v1) = 1.000000
+    (1,0,0)^(0,1,0) : (0.000000, 0.000000, 1.000000)
+    (0,1,0)^(0,0,1) : (1.000000, 0.000000, 0.000000)
+    (0,0,1)^(1,0,0) : (0.000000, 1.000000, 0.000000)
+    (0,1,0)^(1,0,0) : (0.000000, 0.000000, -1.000000)
     */
     t_vect v1, v2, v3, v4;
     printf("Testing Vector\n");
@@ -109,4 +114,19 @@ void vector_test()
     vector_print(&v4, "(0,0,1)^(1,0,0)");
     vector_product(&v2, &v1, &v4);
     vector_print(&v4, "(0,1,0)^(1,0,0)");
+}
+
+void test_suite_camera()
+{
+    t_vect v1;
+    t_camera c;
+
+    camera_set_origin(&c, 3, 4, 5);
+    camera_print(&c);
+    vector_set(&v1, 1, 2, 3);
+    camera_set_originv(&c, &v1);
+    camera_print(&c);
+    vector_set(&v1, 1, 1, 1);
+    camera_set_directionv(&c, &v1);
+    camera_print(&c);
 }
