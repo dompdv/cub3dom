@@ -8,6 +8,7 @@
 #include "vector.h"
 #include "camera.h"
 #include "color.h"
+#include "object.h"
 
 typedef struct s_data
 {
@@ -31,7 +32,7 @@ typedef struct s_textures
 typedef struct s_world
 {
 	t_camera camera;
-	//	t_vect size;
+	t_container *scene;
 	int **map;
 	t_textures textures;
 } t_world;

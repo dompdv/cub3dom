@@ -74,6 +74,8 @@ int main(void)
 	int x, y, color;
 
 	world.map = (int **)worldMap;
+	world.scene = object_new_container(10);
+
 	camera_set_origin(&world.camera, 12, 12, 0.5);
 	camera_set_direction(&world.camera, 1, 1, 0);
 	camera_set_focal(&world.camera, 0.2);
@@ -101,6 +103,8 @@ int main(void)
 	//	draw_vertical_line(&img, x, draw_start, draw_stop, color);
 	mlx_put_image_to_window(display.mlx, display.window.reference, img.img, 0, 0);
 	mlx_loop(display.mlx);
+
+	object_free(world.scene);
 	return 0;
 }
 
