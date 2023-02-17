@@ -7,6 +7,7 @@
 #include "../libft/libft.h"
 #include "vector.h"
 #include "camera.h"
+#include "color.h"
 
 typedef struct s_data
 {
@@ -16,13 +17,6 @@ typedef struct s_data
 	int line_length;
 	int endian;
 } t_data;
-
-typedef struct s_color
-{
-	int r;
-	int g;
-	int b;
-} t_color;
 
 typedef struct s_textures
 {

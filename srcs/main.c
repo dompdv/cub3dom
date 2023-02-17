@@ -1,5 +1,5 @@
-#include "../includes/cub3d.h"
 #include <stdio.h>
+#include "../includes/cub3d.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 400
@@ -41,44 +41,6 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-int create_trgb(int t, int r, int g, int b)
-{
-	return (t << 24 | r << 16 | g << 8 | b);
-}
-
-int color_to_int(t_color *c)
-{
-	return (c->r << 16 | c->g << 8 | c->b);
-}
-
-char get_color_name(int color)
-{
-	int r;
-	int g;
-	int b;
-
-	r = (color >> 16 & 0xFF);
-	g = (color >> 8 & 0xFF);
-	b = (color & 0xFF);
-	if (r == 255 && g == 0 && b == 0)
-		return ('R');
-	if (r > 0 && g == 0 && b == 0)
-		return ('r');
-	if (r == 0 && g == 255 && b == 0)
-		return ('G');
-	if (r == 0 && g > 0 && b == 0)
-		return ('g');
-	if (r == 0 && g == 0 && b == 255)
-		return ('B');
-	if (r == 0 && g == 0 && b > 0)
-		return ('b');
-	if (r == 255 && g == 255 && b == 255)
-		return ('W');
-	if (r > 0 && g > 0 && b > 0)
-		return ('w');
-	return ('y');
-}
-
 void draw_vertical_line(t_data *data, int x, int draw_start, int draw_end, int color)
 {
 	int y;
@@ -88,30 +50,6 @@ void draw_vertical_line(t_data *data, int x, int draw_start, int draw_end, int c
 		my_mlx_pixel_put(data, x, y, color);
 		y++;
 	}
-}
-
-int get_darker(int color)
-{
-	int r;
-	int g;
-	int b;
-
-	r = (color >> 16 & 0xFF) / 2;
-	g = (color >> 8 & 0xFF) / 2;
-	b = (color & 0xFF) / 2;
-	return (create_trgb(0, r, g, b));
-}
-
-void color_set(t_color *c, int r, int g, int b)
-{
-	c->r = r;
-	c->g = g;
-	c->b = b;
-}
-
-void color_print(t_color *c)
-{
-	printf("rgb=(%d,%d,%d)\n", c->r, c->g, c->b);
 }
 
 void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
