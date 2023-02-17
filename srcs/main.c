@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_HEIGHT 400
 #define mapWidth 24
 #define mapHeight 24
 
@@ -33,13 +33,6 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}};
 
-float absolute_value(float value)
-{
-	if (value >= 0)
-		return (value);
-	return (-value);
-}
-
 void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char *dst;
@@ -51,6 +44,11 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color)
 int create_trgb(int t, int r, int g, int b)
 {
 	return (t << 24 | r << 16 | g << 8 | b);
+}
+
+int color_to_int(t_color *c)
+{
+	return (c->r << 16 | c->g << 8 | c->b);
 }
 
 char get_color_name(int color)
@@ -104,30 +102,71 @@ int get_darker(int color)
 	return (create_trgb(0, r, g, b));
 }
 
-int raycast(t_world world)
+void color_set(t_color *c, int r, int g, int b)
 {
-	t_data img;
-
-	img.img = mlx_new_image(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	//	draw_vertical_line(&img, x, draw_start, draw_stop, color);
-	mlx_put_image_to_window(world.mlx, world.window.reference, img.img, 0, 0);
-	return (0);
+	c->r = r;
+	c->g = g;
+	c->b = b;
 }
 
-int main2(void)
+void color_print(t_color *c)
 {
-	t_world world;
+	printf("rgb=(%d,%d,%d)\n", c->r, c->g, c->b);
+}
 
-	world.mlx = mlx_init();
-	/* world.map = (int **)worldMap; */
-	world.window.reference = mlx_new_window(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3D");
-	raycast(world);
-	mlx_loop(world.mlx);
+void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
+{
+	eye->x += 0;
+	dir->x += 0;
+	world->camera.origin.x += 0;
+	//	vector_print(eye, "Eye");
+	//	vector_print(dir, "Dir");
+	//	vector_print(&world->camera.origin, "Origin");
+	hit->hit = 0;
+	if (!hit->hit)
+	{
+		color_set(&hit->color, 0, 0, 255);
+	}
+}
+int main(void)
+{
+	t_display display;
+	t_data img;
+	t_world world;
+	int x, y, color;
+
+	world.map = (int **)worldMap;
+	camera_set_origin(&world.camera, 12, 12, 0.5);
+	camera_set_direction(&world.camera, 1, 1, 0);
+	camera_set_focal(&world.camera, 0.2);
+	camera_set_real_width(&world.camera, 0.4);
+	camera_print(&world.camera);
+
+	display.mlx = mlx_init();
+	display.window.reference = mlx_new_window(display.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3Dom");
+	img.img = mlx_new_image(display.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	for (x = 0; x < SCREEN_WIDTH; x++)
+	{
+		for (y = 0; y < SCREEN_HEIGHT; y++)
+		{
+			t_vect ray;
+			t_hit hit;
+			camera_ray(&ray, &world.camera, x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
+			// printf("(x,y)= (%d,%d) ->", x, y);
+			// vector_print(&ray, "Ray");
+			cast_ray(&hit, &world.camera.origin, &ray, &world);
+			color = color_to_int(&hit.color);
+			my_mlx_pixel_put(&img, x, SCREEN_HEIGHT - 1 - y, color);
+		}
+	}
+	//	draw_vertical_line(&img, x, draw_start, draw_stop, color);
+	mlx_put_image_to_window(display.mlx, display.window.reference, img.img, 0, 0);
+	mlx_loop(display.mlx);
 	return 0;
 }
 
-int main(void)
+int main2(void)
 {
 	test_suite_camera();
 	return 0;

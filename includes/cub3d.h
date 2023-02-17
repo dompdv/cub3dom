@@ -24,12 +24,6 @@ typedef struct s_color
 	int b;
 } t_color;
 
-typedef struct s_window
-{
-	void *reference;
-	t_vect size;
-} t_window;
-
 typedef struct s_textures
 {
 	int **north;
@@ -42,13 +36,32 @@ typedef struct s_textures
 
 typedef struct s_world
 {
+	t_camera camera;
+	//	t_vect size;
+	int **map;
+	t_textures textures;
+} t_world;
+
+typedef struct s_window
+{
+	void *reference;
+	//	t_vect size;
+} t_window;
+
+typedef struct s_display
+{
 	void *mlx;
 	t_window window;
 	t_vect size;
-	int **map;
-	t_camera camera;
-	t_textures textures;
-} t_world;
+} t_display;
+
+typedef struct s_hit
+{
+	int hit;
+	t_vect impact;
+	double distance;
+	t_color color;
+} t_hit;
 
 void test_suite_vector();
 void test_suite_camera();

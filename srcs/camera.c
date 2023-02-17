@@ -52,6 +52,38 @@ void camera_set_directionv(t_camera *camera, t_vect *direction)
     _compute_local_referential(camera);
 }
 
+void camera_set_focal(t_camera *camera, double f)
+{
+    camera->focal = f;
+}
+
+void camera_set_real_width(t_camera *camera, double w)
+{
+    camera->real_width = w;
+}
+
+void camera_ray(t_vect *ray, t_camera *camera, int x, int y, int screen_w, int screen_h)
+{
+    t_vect u, v;
+    double scale_factor;
+    // Compute the center of the screen in model space
+    vector_setv(ray, &camera->direction);
+    vector_scale(ray, camera->focal);
+    //    vector_addv(ray, &camera->origin);
+    // Horizontal
+    scale_factor = camera->real_width / ((double)screen_w);
+    vector_setv(&u, &camera->local_x);
+    vector_scale(&u, scale_factor);
+    vector_scale(&u, (double)(x - screen_w / 2));
+    // Vertical
+    vector_setv(&v, &camera->local_y);
+    vector_scale(&v, scale_factor);
+    vector_scale(&v, (double)(y - screen_h / 2));
+    // Add all
+    vector_addv(ray, &u);
+    vector_addv(ray, &v);
+}
+
 void camera_print(t_camera *camera)
 {
     printf("Camera:\n");

@@ -21,6 +21,9 @@ void camera_set_originv(t_camera *camera, t_vect *origin);
 void camera_set_direction(t_camera *camera, double x, double y, double z);
 void camera_set_direction_polar(t_camera *camera, double theta, double psi);
 void camera_set_directionv(t_camera *camera, t_vect *direction);
+void camera_set_focal(t_camera *camera, double f);
+void camera_set_real_width(t_camera *camera, double w);
+void camera_ray(t_vect *ray, t_camera *camera, int x, int y, int screen_w, int screen_h);
 void camera_print(t_camera *camera);
 
 #endif
