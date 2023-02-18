@@ -26,7 +26,6 @@ void floor_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, doub
     double t;
     t_vect impact;
     t_color color;
-    hit_nothing(hit);
     if ((dir_n->z * eye->z) < 0) // No impact if you're above the floor looking up or below the floor looking down
     {
         t = -eye->z / dir_n->z;
@@ -42,7 +41,7 @@ void floor_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, doub
             color_setc(&color, &self->floor->color2);
         double distance;
         distance = vector_dist(eye, &impact);
-        if (distance > dist_min)
+        if (distance > dist_min && (!hit_has_hit(hit) || distance < hit->distance))
         {
             hit_something(hit, distance, &impact, &color);
         }

@@ -60,7 +60,7 @@ void cubes_add_face_x1(t_object *self, double x, double y_min, double y_max, dou
     }
 }
 
-void _cast_ray_x(t_face *faces, int n_faces, t_hit *hit, t_vect *eye, t_vect *dir_n, double normal)
+void _cast_ray_x(t_face *faces, int n_faces, t_hit *hit, t_vect *eye, t_vect *dir_n, double normal, double dist_min)
 {
     t_vect impact;
     int i;
@@ -80,8 +80,8 @@ void _cast_ray_x(t_face *faces, int n_faces, t_hit *hit, t_vect *eye, t_vect *di
             if (y >= f->b_min && y <= f->b_max && z >= f->c_min && z <= f->c_max)
             {
                 vector_set(&impact, x, y, z);
-                d = vector_dists(eye, &impact);
-                if (!hit_has_hit(hit) || d < hit->distance)
+                d = vector_dist(eye, &impact);
+                if (d > dist_min && (!hit_has_hit(hit) || (d < hit->distance)))
                 {
                     hit_something(hit, d, &impact, &f->color);
                 }
@@ -91,14 +91,8 @@ void _cast_ray_x(t_face *faces, int n_faces, t_hit *hit, t_vect *eye, t_vect *di
 }
 void cubes_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, double dist_min)
 {
-    int i;
-    t_hit local_hit;
-
-    // Starting with nothing hit yet
-    hit_nothing(&local_hit);
     if (dir_n->x < 0)
     {
-        _cast_ray_x(self->cubes->face_x1, self->cubes->n_x1, &local_hit, eye, dir_n, 1.0);
+        _cast_ray_x(self->cubes->face_x1, self->cubes->n_x1, hit, eye, dir_n, 1.0, dist_min);
     }
-    hit_set(hit, &local_hit);
 }

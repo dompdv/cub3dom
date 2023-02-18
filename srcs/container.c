@@ -42,27 +42,9 @@ void container_add(t_object *self, t_object *o)
 
 void container_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, double dist_min)
 {
-    double distance;
-    int i;
-    t_hit local_hit;
-
-    // Starting with nothing hit yet
-    hit_nothing(hit);
-    distance = INFINITY;
-
     // Testing is impact with each contained object is closer to the previous one
-    for (i = 0; i < self->container->n; i++)
+    for (int i = 0; i < self->container->n; i++)
     {
-        t_object *o = self->container->objects[i];
-        object_cast_ray(o, &local_hit, eye, dir_n, dist_min);
-        if (hit_has_hit(&local_hit)) // We hit something...
-        {
-            if (local_hit.distance <= distance && local_hit.distance >= dist_min) // ...closer to the previous one and after the screen
-            {
-                // update the distance and the impact description
-                distance = local_hit.distance;
-                hit_set(hit, &local_hit);
-            }
-        }
+        object_cast_ray(self->container->objects[i], hit, eye, dir_n, dist_min);
     }
 }

@@ -1,7 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
-#include "color.h"
 #include "vector.h"
+#include "color.h"
 #include "hit.h"
 #include "container.h"
 #include "sky.h"

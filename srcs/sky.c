@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "../includes/object.h"
 #include "../includes/sky.h"
+#include "../includes/color.h"
 
 t_object *object_new_sky(t_color horizon, t_color azimut)
 {
@@ -25,7 +26,10 @@ void sky_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, double
 {
     t_vect impact;
     t_color color;
-    hit_nothing(hit);
+
+    if (hit_has_hit(hit) && hit->distance < INFINITY)
+        return;
+
     vector_setv(&impact, dir_n);
     vector_scale(&impact, INFINITY);
 

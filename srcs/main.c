@@ -88,7 +88,7 @@ int main(void)
 	t_color color_face1;
 	color_set(&color_face1, 140, 0, 0);
 	cubes = object_new_cubes(10);
-	cubes_add_face_x1(cubes, -2, 1, 2, 0, 10, &color_face1);
+	cubes_add_face_x1(cubes, -3, 0, 1, 0, 1, &color_face1);
 
 	world.scene = object_new_container(3);
 	container_add(world.scene, floor);
@@ -111,6 +111,7 @@ int main(void)
 		{
 			t_vect ray;
 			t_hit hit;
+			hit_nothing(&hit);
 			color = 0;
 			camera_ray(&ray, &world.camera, x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
 			cast_ray(&hit, &world.camera.origin, &ray, &world);
