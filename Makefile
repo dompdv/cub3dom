@@ -1,7 +1,6 @@
 NAME  = cub3D
 
-SRCS  =  srcs/main.c srcs/vector.c srcs/test_suite.c srcs/camera.c srcs/color.c srcs/object.c srcs/hit.c
-
+SRCS  =  srcs/main.c srcs/vector.c srcs/test_suite.c srcs/camera.c srcs/color.c srcs/hit.c srcs/object.c srcs/sky.c srcs/container.c srcs/floor.c
 OBJS  = ${SRCS:.c=.o}
 
 HEADERS= includes/cub3d.h
