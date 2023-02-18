@@ -62,6 +62,39 @@ void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 	vector_normalize(&dir_n);
 	object_cast_ray(world->scene, hit, eye, &dir_n, dist_min);
 }
+
+void add_cube(t_object *cubes, int x, int y, int type_cube)
+{
+	if (type_cube == 0)
+		return;
+	t_color color_face1, color_face2;
+	if (type_cube == 1)
+	{
+		color_set(&color_face1, 140, 0, 0);
+		color_set(&color_face2, 120, 0, 0);
+	}
+	if (type_cube == 2)
+	{
+		color_set(&color_face1, 0, 140, 0);
+		color_set(&color_face2, 0, 120, 0);
+	}
+	if (type_cube == 3)
+	{
+		color_set(&color_face1, 0, 0, 140);
+		color_set(&color_face2, 0, 0, 120);
+	}
+	if (type_cube == 4 || type_cube == 5)
+	{
+		color_set(&color_face1, type_cube * 50, type_cube * 40, type_cube * 40);
+		color_set(&color_face2, type_cube * 50, type_cube * 40, type_cube * 40);
+	}
+	double p_x = (double)x;
+	double p_y = (double)y;
+	cubes_add_face_x1(cubes, p_x + 1, p_y, p_y + 1, 0, 1, &color_face1);
+	cubes_add_face_xm1(cubes, p_x, p_y, p_y + 1, 0, 1, &color_face1);
+	cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
+	cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
+}
 int main(void)
 {
 	t_display display;
@@ -69,7 +102,7 @@ int main(void)
 	t_world world;
 	int x, y, color;
 
-	world.map = (int **)worldMap;
+	//	world.map = (int **)worldMap;
 
 	t_object *floor;
 	t_color floor_color1, floor_color2;
@@ -88,20 +121,22 @@ int main(void)
 	t_color color_face1, color_face2;
 	color_set(&color_face1, 140, 0, 0);
 	color_set(&color_face2, 0, 140, 0);
-	cubes = object_new_cubes(10);
-	cubes_add_face_x1(cubes, -3, 1, 2, 0, 1, &color_face1);
-	cubes_add_face_y1(cubes, -2, -4, -3, 0, 1, &color_face2);
-	cubes_add_face_ym1(cubes, 1, -4, -3, 0, 1, &color_face2);
-	cubes_add_face_z1(cubes, 0.1, -3, -2.5, 0, -1, &color_face1);
-	cubes_add_face_zm1(cubes, 1.5, -3, -2.5, 0, -1, &color_face1);
+	cubes = object_new_cubes(mapWidth * mapHeight);
+	for (int c = 0; c < mapWidth; c++)
+	{
+		for (int r = 0; r < mapHeight; r++)
+		{
+			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c]);
+		}
+	}
 
 	world.scene = object_new_container(3);
 	container_add(world.scene, floor);
 	container_add(world.scene, cubes);
 	container_add(world.scene, sky);
 
-	camera_set_origin(&world.camera, 0, 0, 0.5);
-	camera_set_direction(&world.camera, -1, 0, 0);
+	camera_set_origin(&world.camera, 4, 11, 0.5);
+	camera_set_direction(&world.camera, 1, 1, 0);
 	camera_set_focal(&world.camera, 0.2);
 	camera_set_real_width(&world.camera, 0.4);
 	camera_print(&world.camera);
