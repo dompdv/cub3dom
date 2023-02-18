@@ -28,6 +28,6 @@ void object_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, dou
         floor_cast_ray(self, hit, eye, dir_n, dist_min);
     if (self->type == O_Sky)
         sky_cast_ray(self, hit, eye, dir_n, dist_min);
-    if (self->type == O_Sky)
+    if (self->type == O_Cubes)
         cubes_cast_ray(self, hit, eye, dir_n, dist_min);
 }

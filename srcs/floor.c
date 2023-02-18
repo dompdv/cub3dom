@@ -23,13 +23,15 @@ void floor_free(t_object *self)
 
 void floor_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, double dist_min)
 {
+    double t;
     t_vect impact;
     t_color color;
     hit_nothing(hit);
     if ((dir_n->z * eye->z) < 0) // No impact if you're above the floor looking up or below the floor looking down
     {
+        t = -eye->z / dir_n->z;
         // Impact location
-        vector_set(&impact, eye->x - dir_n->x * eye->z / dir_n->z, eye->y - dir_n->y * eye->z / dir_n->z, 0);
+        vector_set(&impact, eye->x + t * dir_n->x, eye->y + t * dir_n->y, 0);
         long x, y;
         x = (long)impact.x;
         y = (long)impact.y;

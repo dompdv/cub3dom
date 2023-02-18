@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "../includes/object.h"
 #include "../includes/container.h"
 
@@ -35,7 +36,7 @@ void container_add(t_object *self, t_object *o)
     if (self->container->n < self->container->n_max)
     {
         self->container->objects[self->container->n] = o;
-        self->container->n++;
+        self->container->n += 1;
     }
 }
 

@@ -71,22 +71,32 @@ int main(void)
 
 	world.map = (int **)worldMap;
 
-	t_color floor_color1, floor_color2, azimut, horizon;
-	color_set(&floor_color1, 230, 250, 230);
-	color_set(&floor_color2, 100, 100, 100);
+	t_object *floor;
+	t_color floor_color1, floor_color2;
+
+	color_set(&floor_color1, 200, 200, 230);
+	color_set(&floor_color2, 180, 180, 210);
+	floor = object_new_floor(floor_color1, floor_color2);
+
+	t_object *sky;
+	t_color azimut, horizon;
 	color_set(&horizon, 200, 200, 200);
 	color_set(&azimut, 0, 0, 150);
-
-	t_object *floor, *sky;
-	floor = object_new_floor(floor_color1, floor_color2);
 	sky = object_new_sky(horizon, azimut);
 
-	world.scene = object_new_container(2);
+	t_object *cubes;
+	t_color color_face1;
+	color_set(&color_face1, 140, 0, 0);
+	cubes = object_new_cubes(10);
+	cubes_add_face_x1(cubes, -2, 1, 2, 0, 10, &color_face1);
+
+	world.scene = object_new_container(3);
 	container_add(world.scene, floor);
+	container_add(world.scene, cubes);
 	container_add(world.scene, sky);
 
-	camera_set_origin(&world.camera, 12, 12, 0.5);
-	camera_set_direction(&world.camera, 1, 1, 0);
+	camera_set_origin(&world.camera, 0, 0, 0.5);
+	camera_set_direction(&world.camera, -1, 0, 0);
 	camera_set_focal(&world.camera, 0.2);
 	camera_set_real_width(&world.camera, 0.4);
 	camera_print(&world.camera);
