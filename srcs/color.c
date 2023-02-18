@@ -8,7 +8,7 @@ int create_trgb(int t, int r, int g, int b)
 
 int color_to_int(t_color *c)
 {
-    return (c->r << 16 | c->g << 8 | c->b);
+    return create_trgb(0, c->r, c->g, c->b);
 }
 
 char get_color_name(int color)
@@ -63,6 +63,21 @@ void color_setc(t_color *c, t_color *c2)
     c->r = c2->r;
     c->g = c2->g;
     c->b = c2->b;
+}
+double clamp(double t)
+{
+    if (t < 0)
+        return 0;
+    if (t > 1)
+        return 1;
+    return t;
+}
+void color_gradient(t_color *c, t_color *c2, double t)
+{
+    t = clamp(t);
+    c->r = (int)(t * (double)c->r + (1 - t) * (double)c2->r);
+    c->g = (int)(t * (double)c->g + (1 - t) * (double)c2->g);
+    c->b = (int)(t * (double)c->b + (1 - t) * (double)c2->b);
 }
 
 void color_print(t_color *c)

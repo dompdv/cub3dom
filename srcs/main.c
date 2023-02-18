@@ -5,7 +5,6 @@
 #define SCREEN_HEIGHT 400
 #define mapWidth 24
 #define mapHeight 24
-#define INFINITY 1e+100
 
 int worldMap[mapWidth][mapHeight] =
 	{
@@ -61,18 +60,7 @@ void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 	dist_min = vector_norm(dir);
 	vector_setv(&dir_n, dir);
 	vector_normalize(&dir_n);
-
-	printf("Dist min : %f", dist_min);
-	eye->x += 0;
-	world->camera.origin.x += 0;
-	//	vector_print(eye, "Eye");
-	//	vector_print(dir, "Dir");
-	//	vector_print(&world->camera.origin, "Origin");
-	hit->hit = 0;
-	if (!hit->hit)
-	{
-		color_set(&hit->color, 0, 0, 255);
-	}
+	object_cast_ray(world->scene, hit, eye, &dir_n, dist_min);
 }
 int main(void)
 {
@@ -83,13 +71,14 @@ int main(void)
 
 	world.map = (int **)worldMap;
 
-	t_color floor_color, azimut, horizon;
-	color_set(&floor_color, 10, 120, 10);
-	color_set(&horizon, 200, 200, 255);
+	t_color floor_color1, floor_color2, azimut, horizon;
+	color_set(&floor_color1, 230, 250, 230);
+	color_set(&floor_color2, 100, 100, 100);
+	color_set(&horizon, 200, 200, 200);
 	color_set(&azimut, 0, 0, 150);
 
 	t_object *floor, *sky;
-	floor = object_new_floor(floor_color);
+	floor = object_new_floor(floor_color1, floor_color2);
 	sky = object_new_sky(horizon, azimut);
 
 	world.scene = object_new_container(2);
@@ -112,11 +101,11 @@ int main(void)
 		{
 			t_vect ray;
 			t_hit hit;
+			color = 0;
 			camera_ray(&ray, &world.camera, x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
-			// printf("(x,y)= (%d,%d) ->", x, y);
-			// vector_print(&ray, "Ray");
 			cast_ray(&hit, &world.camera.origin, &ray, &world);
-			color = color_to_int(&hit.color);
+			if (hit_has_hit(&hit))
+				color = color_to_int(&hit.color);
 			my_mlx_pixel_put(&img, x, SCREEN_HEIGHT - 1 - y, color);
 		}
 	}

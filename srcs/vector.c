@@ -155,3 +155,12 @@ void vector_product(t_vect *v1, t_vect *v2, t_vect *result)
 	result->y = v1->z * v2->x - v1->x * v2->z;
 	result->z = v1->x * v2->y - v1->y * v2->x;
 }
+
+double vector_dists(t_vect *v1, t_vect *v2)
+{
+	return (v1->x - v2->x) * (v1->x - v2->x) + (v1->y - v2->y) * (v1->y - v2->y) + (v1->z - v2->z) * (v1->z - v2->z);
+}
+double vector_dist(t_vect *v1, t_vect *v2)
+{
+	return sqrt(vector_dists(v1, v2));
+}

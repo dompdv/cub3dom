@@ -25,5 +25,7 @@ void vector_roty(t_vect *vect, double rad);
 void vector_rotz(t_vect *vect, double rad);
 void vector_print(t_vect *vector, char *name);
 void vector_product(t_vect *v1, t_vect *v2, t_vect *result);
+double vector_dists(t_vect *v1, t_vect *v2);
+double vector_dist(t_vect *v1, t_vect *v2);
 
 #endif

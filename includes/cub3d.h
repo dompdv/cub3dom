@@ -50,14 +50,6 @@ typedef struct s_display
 	t_vect size;
 } t_display;
 
-typedef struct s_hit
-{
-	int hit;
-	t_vect impact;
-	double distance;
-	t_color color;
-} t_hit;
-
 void test_suite_vector();
 void test_suite_camera();
 

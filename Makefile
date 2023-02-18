@@ -8,7 +8,7 @@ HEADERS= includes/cub3d.h
 
 CC= clang
 
-CFLAGS= -Wall -Wextra -Werror -g3 
+CFLAGS= -Wall -Wextra -g3 
 
 LIBFT= -L libft -lft
 
