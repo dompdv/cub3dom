@@ -85,10 +85,15 @@ int main(void)
 	sky = object_new_sky(horizon, azimut);
 
 	t_object *cubes;
-	t_color color_face1;
+	t_color color_face1, color_face2;
 	color_set(&color_face1, 140, 0, 0);
+	color_set(&color_face2, 0, 140, 0);
 	cubes = object_new_cubes(10);
-	cubes_add_face_x1(cubes, -3, 0, 1, 0, 1, &color_face1);
+	cubes_add_face_x1(cubes, -3, 1, 2, 0, 1, &color_face1);
+	cubes_add_face_y1(cubes, -2, -4, -3, 0, 1, &color_face2);
+	cubes_add_face_ym1(cubes, 1, -4, -3, 0, 1, &color_face2);
+	cubes_add_face_z1(cubes, 0.1, -3, -2.5, 0, -1, &color_face1);
+	cubes_add_face_zm1(cubes, 1.5, -3, -2.5, 0, -1, &color_face1);
 
 	world.scene = object_new_container(3);
 	container_add(world.scene, floor);
