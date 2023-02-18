@@ -32,7 +32,7 @@ typedef struct s_textures
 typedef struct s_world
 {
 	t_camera camera;
-	t_container *scene;
+	t_object *scene;
 	int **map;
 	t_textures textures;
 } t_world;

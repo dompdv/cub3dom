@@ -5,6 +5,7 @@
 #define SCREEN_HEIGHT 400
 #define mapWidth 24
 #define mapHeight 24
+#define INFINITY 1e+100
 
 int worldMap[mapWidth][mapHeight] =
 	{
@@ -54,8 +55,15 @@ void draw_vertical_line(t_data *data, int x, int draw_start, int draw_end, int c
 
 void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 {
+	double dist_min; // Distance [eye,screen]
+	t_vect dir_n;	 // Normalized direction vector
+
+	dist_min = vector_norm(dir);
+	vector_setv(&dir_n, dir);
+	vector_normalize(&dir_n);
+
+	printf("Dist min : %f", dist_min);
 	eye->x += 0;
-	dir->x += 0;
 	world->camera.origin.x += 0;
 	//	vector_print(eye, "Eye");
 	//	vector_print(dir, "Dir");
@@ -74,7 +82,19 @@ int main(void)
 	int x, y, color;
 
 	world.map = (int **)worldMap;
-	world.scene = object_new_container(10);
+
+	t_color floor_color, azimut, horizon;
+	color_set(&floor_color, 10, 120, 10);
+	color_set(&horizon, 200, 200, 255);
+	color_set(&azimut, 0, 0, 150);
+
+	t_object *floor, *sky;
+	floor = object_new_floor(floor_color);
+	sky = object_new_sky(horizon, azimut);
+
+	world.scene = object_new_container(2);
+	container_add(world.scene, floor);
+	container_add(world.scene, sky);
 
 	camera_set_origin(&world.camera, 12, 12, 0.5);
 	camera_set_direction(&world.camera, 1, 1, 0);

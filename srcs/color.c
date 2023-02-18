@@ -58,6 +58,13 @@ void color_set(t_color *c, int r, int g, int b)
     c->b = b;
 }
 
+void color_setc(t_color *c, t_color *c2)
+{
+    c->r = c2->r;
+    c->g = c2->g;
+    c->b = c2->b;
+}
+
 void color_print(t_color *c)
 {
     printf("rgb=(%d,%d,%d)\n", c->r, c->g, c->b);

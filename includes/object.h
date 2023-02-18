@@ -16,7 +16,7 @@ typedef struct s_container
 {
     int n_max;
     int n;
-    struct s_object *objects;
+    t_object **objects;
 } t_container;
 
 typedef struct s_sky
@@ -43,5 +43,10 @@ typedef struct s_object
 } t_object;
 
 t_object *object_new_container(int n_max_objects);
+t_object *object_new_sky(t_color horizon, t_color azimut);
+t_object *object_new_floor(t_color color);
 void object_free(t_object *o);
+
+void container_add(t_object *self, t_object *o);
+
 #endif
