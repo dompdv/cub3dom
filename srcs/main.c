@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <X11/keysym.h>
+#include <X11/X.h>
 #include <math.h>
 #include "../includes/cub3d.h"
 
@@ -68,7 +69,7 @@ void exit_cub3d(t_world *world)
 
 	if (world->window_ref && world->mlx)
 	{
-		mlx_destroy_image(&world->mlx, &world->img.img);
+		// mlx_destroy_image(&world->mlx, &world->img.img);
 		mlx_destroy_window(world->mlx, world->window_ref);
 	}
 	if (world->mlx)
@@ -83,22 +84,21 @@ void exit_cub3d(t_world *world)
 
 int monitor_input(int key, t_world *world)
 {
-	printf("Key %d\n", key);
-	double v = 0.1;
-	double rot_rad = M_PI / 36;
+	double v = 0.15;
+	double rot_rad = M_PI / 20;
 	if (key == KEY_Z)
 		camera_move(&world->camera, v, 0);
-	else if (key == KEY_S)
+	if (key == KEY_S)
 		camera_move(&world->camera, -v, 0);
-	else if (key == KEY_Q)
+	if (key == KEY_Q)
 		camera_move(&world->camera, 0, v);
-	else if (key == KEY_D)
+	if (key == KEY_D)
 		camera_move(&world->camera, 0, -v);
-	else if (key == XK_Left)
+	if (key == XK_Left)
 		camera_turn(&world->camera, rot_rad);
-	else if (key == XK_Right)
+	if (key == XK_Right)
 		camera_turn(&world->camera, -rot_rad);
-	else if (key == XK_Escape)
+	if (key == XK_Escape)
 		exit_cub3d(world);
 	return (0);
 }
@@ -233,7 +233,8 @@ int main(void)
 	world.img.addr = mlx_get_data_addr(world.img.img, &world.img.bits_per_pixel, &world.img.line_length, &world.img.endian);
 	world.start_time = time(NULL);
 	mlx_loop_hook(world.mlx, &loop, (void *)&world);
-	mlx_key_hook(world.window_ref, &monitor_input, &world);
+	//	mlx_key_hook(world.window_ref, &monitor_input, &world);
+	mlx_hook(world.window_ref, KeyPress, KeyPressMask, &monitor_input, &world);
 
 	mlx_loop(world.mlx);
 
