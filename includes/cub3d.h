@@ -37,6 +37,9 @@ typedef struct s_world
 	t_object *scene;
 	t_textures textures;
 	int time;
+	t_data img;
+	int screen_width;
+	int screen_height;
 } t_world;
 
 void test_suite_vector();
