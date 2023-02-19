@@ -32,23 +32,12 @@ typedef struct s_textures
 typedef struct s_world
 {
 	t_camera camera;
-	t_object *scene;
-	int **map;
-	t_textures textures;
-} t_world;
-
-typedef struct s_window
-{
-	void *reference;
-	//	t_vect size;
-} t_window;
-
-typedef struct s_display
-{
 	void *mlx;
-	t_window window;
-	t_vect size;
-} t_display;
+	void *window_ref;
+	t_object *scene;
+	t_textures textures;
+	int time;
+} t_world;
 
 void test_suite_vector();
 void test_suite_camera();

@@ -95,15 +95,40 @@ void add_cube(t_object *cubes, int x, int y, int type_cube)
 	cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
 	cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
 }
+
+int loop(t_world *world)
+{
+	t_data img;
+	int x, y;
+	int color;
+
+	printf("loop: %d\n", world->time);
+	world->time += 1;
+	img.img = mlx_new_image(world->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
+	for (x = 0; x < SCREEN_WIDTH; x++)
+	{
+		for (y = 0; y < SCREEN_HEIGHT; y++)
+		{
+			t_vect ray;
+			t_hit hit;
+			hit_nothing(&hit);
+			color = 0;
+			camera_ray(&ray, &world->camera, x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
+			cast_ray(&hit, &world->camera.origin, &ray, world);
+			if (hit_has_hit(&hit))
+				color = color_to_int(&hit.color);
+			my_mlx_pixel_put(&img, x, SCREEN_HEIGHT - 1 - y, color);
+		}
+	}
+	//	draw_vertical_line(&img, x, draw_start, draw_stop, color);
+	mlx_put_image_to_window(world->mlx, world->window_ref, img.img, 0, 0);
+	return (0);
+}
 int main(void)
 {
-	t_display display;
-	t_data img;
 	t_world world;
-	int x, y, color;
-
-	//	world.map = (int **)worldMap;
-
+	world.time = 0;
 	t_object *floor;
 	t_color floor_color1, floor_color2;
 
@@ -141,28 +166,10 @@ int main(void)
 	camera_set_real_width(&world.camera, 0.4);
 	camera_print(&world.camera);
 
-	display.mlx = mlx_init();
-	display.window.reference = mlx_new_window(display.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3Dom");
-	img.img = mlx_new_image(display.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	for (x = 0; x < SCREEN_WIDTH; x++)
-	{
-		for (y = 0; y < SCREEN_HEIGHT; y++)
-		{
-			t_vect ray;
-			t_hit hit;
-			hit_nothing(&hit);
-			color = 0;
-			camera_ray(&ray, &world.camera, x, y, SCREEN_WIDTH, SCREEN_HEIGHT);
-			cast_ray(&hit, &world.camera.origin, &ray, &world);
-			if (hit_has_hit(&hit))
-				color = color_to_int(&hit.color);
-			my_mlx_pixel_put(&img, x, SCREEN_HEIGHT - 1 - y, color);
-		}
-	}
-	//	draw_vertical_line(&img, x, draw_start, draw_stop, color);
-	mlx_put_image_to_window(display.mlx, display.window.reference, img.img, 0, 0);
-	mlx_loop(display.mlx);
+	world.mlx = mlx_init();
+	world.window_ref = mlx_new_window(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3Dom");
+	mlx_loop_hook(world.mlx, &loop, (void *)&world);
+	mlx_loop(world.mlx);
 
 	object_free(world.scene);
 	return 0;
