@@ -63,7 +63,7 @@ void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 	object_cast_ray(world->scene, hit, eye, &dir_n, dist_min);
 }
 
-void add_cube(t_object *cubes, int x, int y, int type_cube)
+void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int w, int h)
 {
 	if (type_cube == 0)
 		return;
@@ -90,19 +90,30 @@ void add_cube(t_object *cubes, int x, int y, int type_cube)
 	}
 	double p_x = (double)x;
 	double p_y = (double)y;
-	cubes_add_face_x1(cubes, p_x + 1, p_y, p_y + 1, 0, 1, &color_face1);
-	cubes_add_face_xm1(cubes, p_x, p_y, p_y + 1, 0, 1, &color_face1);
-	cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
-	cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
+	if (x < (w - 1) && map[(h - 1 - y) * w + x + 1] == 0)
+		cubes_add_face_x1(cubes, p_x + 1, p_y, p_y + 1, 0, 1, &color_face1);
+	if (x > 0 && map[(h - 1 - y) * w + x - 1] == 0)
+		cubes_add_face_xm1(cubes, p_x, p_y, p_y + 1, 0, 1, &color_face1);
+	if (y < (h - 1) && map[(h - 1 - y - 1) * w + x] == 0)
+		cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
+	if (y > 0 && map[(h - y) * w + x] == 0)
+		cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
 }
 
 int loop(t_world *world)
 {
 	int x, y;
 	int color;
+	time_t seconds;
+	float fps = 0;
 
-	printf("loop: %d\n", world->time);
-	world->time += 1;
+	seconds = time(NULL);
+	if (seconds > world->start_time)
+		fps = ((float)world->frames) / ((float)(seconds - world->start_time));
+	if (world->frames % 10 == 0)
+		printf("Frames: %ld, Time: %ld, FPS: %f \n", world->frames, seconds - world->start_time, fps);
+	world->frames += 1;
+
 	for (x = 0; x < world->screen_width; x++)
 	{
 		for (y = 0; y < world->screen_height; y++)
@@ -124,7 +135,7 @@ int loop(t_world *world)
 int main(void)
 {
 	t_world world;
-	world.time = 0;
+	world.frames = 0;
 	world.screen_width = SCREEN_WIDTH;
 	world.screen_height = SCREEN_HEIGHT;
 
@@ -150,7 +161,7 @@ int main(void)
 	{
 		for (int r = 0; r < mapHeight; r++)
 		{
-			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c]);
+			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c], (int *)worldMap, mapWidth, mapHeight);
 		}
 	}
 
@@ -169,6 +180,7 @@ int main(void)
 	world.window_ref = mlx_new_window(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "Cub3Dom");
 	world.img.img = mlx_new_image(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	world.img.addr = mlx_get_data_addr(world.img.img, &world.img.bits_per_pixel, &world.img.line_length, &world.img.endian);
+	world.start_time = time(NULL);
 
 	mlx_loop_hook(world.mlx, &loop, (void *)&world);
 	mlx_loop(world.mlx);

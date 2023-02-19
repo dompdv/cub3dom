@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "../mlx/mlx.h"
 #include "../libft/libft.h"
 #include "vector.h"
@@ -36,10 +37,11 @@ typedef struct s_world
 	void *window_ref;
 	t_object *scene;
 	t_textures textures;
-	int time;
 	t_data img;
 	int screen_width;
 	int screen_height;
+	long frames;
+	time_t start_time;
 } t_world;
 
 void test_suite_vector();
