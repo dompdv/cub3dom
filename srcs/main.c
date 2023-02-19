@@ -1,5 +1,14 @@
 #include <stdio.h>
+#include <X11/keysym.h>
+#include <math.h>
 #include "../includes/cub3d.h"
+
+#define KEY_Q 113
+#define KEY_D 100
+#define KEY_Z 122
+#define KEY_S 115
+#define KEY_A 97
+#define KEY_W 119
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 400
@@ -50,6 +59,48 @@ void draw_vertical_line(t_data *data, int x, int draw_start, int draw_end, int c
 		my_mlx_pixel_put(data, x, y, color);
 		y++;
 	}
+}
+
+void exit_cub3d(t_world *world)
+{
+	if (!world)
+		exit(0);
+
+	if (world->window_ref && world->mlx)
+	{
+		mlx_destroy_image(&world->mlx, &world->img.img);
+		mlx_destroy_window(world->mlx, world->window_ref);
+	}
+	if (world->mlx)
+	{
+		mlx_destroy_display(world->mlx);
+		mlx_loop_end(world->mlx);
+		free(world->mlx);
+	}
+	object_free(world->scene);
+	exit(0);
+}
+
+int monitor_input(int key, t_world *world)
+{
+	printf("Key %d\n", key);
+	double v = 0.1;
+	double rot_rad = M_PI / 36;
+	if (key == KEY_Z)
+		camera_move(&world->camera, v, 0);
+	else if (key == KEY_S)
+		camera_move(&world->camera, -v, 0);
+	else if (key == KEY_Q)
+		camera_move(&world->camera, 0, v);
+	else if (key == KEY_D)
+		camera_move(&world->camera, 0, -v);
+	else if (key == XK_Left)
+		camera_turn(&world->camera, rot_rad);
+	else if (key == XK_Right)
+		camera_turn(&world->camera, -rot_rad);
+	else if (key == XK_Escape)
+		exit_cub3d(world);
+	return (0);
 }
 
 void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
@@ -181,11 +232,11 @@ int main(void)
 	world.img.img = mlx_new_image(world.mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	world.img.addr = mlx_get_data_addr(world.img.img, &world.img.bits_per_pixel, &world.img.line_length, &world.img.endian);
 	world.start_time = time(NULL);
-
 	mlx_loop_hook(world.mlx, &loop, (void *)&world);
+	mlx_key_hook(world.window_ref, &monitor_input, &world);
+
 	mlx_loop(world.mlx);
 
-	object_free(world.scene);
 	return 0;
 }
 

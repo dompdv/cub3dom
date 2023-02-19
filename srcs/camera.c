@@ -92,3 +92,30 @@ void camera_print(t_camera *camera)
     vector_print(&camera->local_x, "Local_x");
     vector_print(&camera->local_y, "Local_y");
 }
+
+void camera_move(t_camera *camera, double forward, double slide)
+{
+    t_vect dir_xy;
+    t_vect delta;
+    // Move on the forward axis
+    vector_setv(&dir_xy, &camera->direction);
+    dir_xy.z = 0;
+    vector_normalize(&dir_xy);
+
+    vector_setv(&delta, &dir_xy);
+    vector_scale(&delta, forward);
+    vector_addv(&camera->origin, &delta);
+    // Move perpendicular
+    vector_rotz(&dir_xy, M_PI_2);
+    vector_setv(&delta, &dir_xy);
+    vector_scale(&delta, slide);
+    vector_addv(&camera->origin, &delta);
+}
+
+void camera_turn(t_camera *camera, double rad)
+{
+    t_vect new_dir;
+    vector_setv(&new_dir, &camera->direction);
+    vector_rotz(&new_dir, rad);
+    camera_set_directionv(camera, &new_dir);
+}

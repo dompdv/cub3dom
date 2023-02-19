@@ -24,6 +24,8 @@ void camera_set_directionv(t_camera *camera, t_vect *direction);
 void camera_set_focal(t_camera *camera, double f);
 void camera_set_real_width(t_camera *camera, double w);
 void camera_ray(t_vect *ray, t_camera *camera, int x, int y, int screen_w, int screen_h);
+void camera_move(t_camera *camera, double vx, double vy);
+void camera_turn(t_camera *camera, double rad);
 void camera_print(t_camera *camera);
 
 #endif
