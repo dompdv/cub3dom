@@ -114,7 +114,7 @@ void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 	object_cast_ray(world->scene, hit, eye, &dir_n, dist_min);
 }
 
-void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int w, int h)
+void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int x_min, int y_min, int x_max, int y_max, int w, int h)
 {
 	if (type_cube == 0)
 		return;
@@ -141,13 +141,13 @@ void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int w, int
 	}
 	double p_x = (double)x;
 	double p_y = (double)y;
-	if (x < (w - 1) && map[(h - 1 - y) * w + x + 1] == 0)
+	if (x >= (x_max - 1) || map[(h - 1 - y) * w + x + 1] == 0)
 		cubes_add_face_x1(cubes, p_x + 1, p_y, p_y + 1, 0, 1, &color_face1);
-	if (x > 0 && map[(h - 1 - y) * w + x - 1] == 0)
+	if (x > x_min || map[(h - 1 - y) * w + x - 1] == 0)
 		cubes_add_face_xm1(cubes, p_x, p_y, p_y + 1, 0, 1, &color_face1);
-	if (y < (h - 1) && map[(h - 1 - y - 1) * w + x] == 0)
+	if (y < (y_max - 1) || map[(h - 1 - y - 1) * w + x] == 0)
 		cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
-	if (y > 0 && map[(h - y) * w + x] == 0)
+	if (y > y_min || map[(h - y) * w + x] == 0)
 		cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
 }
 
@@ -159,10 +159,16 @@ int loop(t_world *world)
 	float fps = 0;
 
 	seconds = time(NULL);
+	time_t elapsed;
+	elapsed = seconds - world->start_time;
 	if (seconds > world->start_time)
-		fps = ((float)world->frames) / ((float)(seconds - world->start_time));
-	if (world->frames % 10 == 0)
-		printf("Frames: %ld, Time: %ld, FPS: %f \n", world->frames, seconds - world->start_time, fps);
+		fps = ((float)world->frames) / ((float)(elapsed));
+	if (elapsed > 0 && elapsed % 5 == 0)
+	{
+		printf("Frames: %ld, Time: %ld, FPS: %f \n", world->frames, elapsed, fps);
+		world->start_time = seconds;
+		world->frames = 0;
+	}
 	world->frames += 1;
 
 	for (x = 0; x < world->screen_width; x++)
@@ -212,7 +218,7 @@ int main(void)
 	{
 		for (int r = 0; r < mapHeight; r++)
 		{
-			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c], (int *)worldMap, mapWidth, mapHeight);
+			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c], (int *)worldMap, 0, 0, mapWidth, mapHeight, mapWidth, mapHeight);
 		}
 	}
 
