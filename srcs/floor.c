@@ -8,6 +8,7 @@ t_object *object_new_floor(t_color color1, t_color color2)
     t_floor *floor;
     object = malloc(sizeof(t_object));
     object->type = O_Floor;
+    object_init(object);
     floor = malloc(sizeof(t_floor));
     color_setc(&floor->color1, &color1);
     color_setc(&floor->color2, &color2);

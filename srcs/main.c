@@ -114,7 +114,7 @@ void cast_ray(t_hit *hit, t_vect *eye, t_vect *dir, t_world *world)
 	object_cast_ray(world->scene, hit, eye, &dir_n, dist_min);
 }
 
-void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int x_min, int y_min, int x_max, int y_max, int w, int h)
+void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int x_min, int x_max, int y_min, int y_max, int w, int h)
 {
 	if (type_cube == 0)
 		return;
@@ -209,23 +209,52 @@ int main(void)
 	color_set(&azimut, 0, 0, 150);
 	sky = object_new_sky(horizon, azimut);
 
-	t_object *cubes;
 	t_color color_face1, color_face2;
 	color_set(&color_face1, 140, 0, 0);
 	color_set(&color_face2, 0, 140, 0);
-	cubes = object_new_cubes(mapWidth * mapHeight);
-	for (int c = 0; c < mapWidth; c++)
+	int slice = 2;
+	int w, h;
+	w = mapWidth / slice;
+	h = mapHeight / slice;
+	t_object **area_cubes;
+	area_cubes = malloc(slice * slice * sizeof(t_object));
+	for (int i = 0; i < slice * slice; i++)
 	{
-		for (int r = 0; r < mapHeight; r++)
+		area_cubes[i] = object_new_cubes(mapWidth * mapHeight / (slice * slice));
+	}
+	for (int ac = 0; ac < slice; ac++)
+	{
+		for (int ar = 0; ar < slice; ar++)
 		{
-			add_cube(cubes, c, r, worldMap[mapHeight - 1 - r][c], (int *)worldMap, 0, 0, mapWidth, mapHeight, mapWidth, mapHeight);
+			for (int c = ac * w; c < (ac + 1) * w; c++)
+			{
+				for (int r = ar * h; r < (ar + 1) * h; r++)
+					add_cube(area_cubes[ac + ar * slice], c, r, worldMap[mapHeight - 1 - r][c],
+							 (int *)worldMap, ac * w, (ac + 1) * w, ar * h, (ar + 1) * h, mapWidth, mapHeight);
+			}
 		}
 	}
 
-	world.scene = object_new_container(3);
+	printf("Sky\n");
+	object_print(sky);
+	printf("Floor\n");
+	object_print(floor);
+
+	world.scene = object_new_container(2 + slice * slice);
+	printf("Container\n");
+	object_print(world.scene);
+	printf("Cubes\n");
+	for (int i = 0; i < slice * slice; i++)
+	{
+		object_print(area_cubes[i]);
+		container_add(world.scene, area_cubes[i]);
+	}
+	object_print(world.scene);
 	container_add(world.scene, floor);
-	container_add(world.scene, cubes);
+	object_print(world.scene);
 	container_add(world.scene, sky);
+	object_print(world.scene);
+	free(area_cubes);
 
 	camera_set_origin(&world.camera, 4, 11, 0.5);
 	camera_set_direction(&world.camera, 1, 1, 0);

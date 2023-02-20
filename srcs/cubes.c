@@ -8,7 +8,10 @@ t_object *object_new_cubes(int n_max_faces)
     t_object *object;
     t_cubes *cubes;
     object = malloc(sizeof(t_object));
+    object_init(object);
     object->type = O_Cubes;
+    object->bounded = 1;
+    object->englobing = 1;
     cubes = malloc(sizeof(t_cubes));
     cubes->n_max = n_max_faces;
     cubes->n_x1 = 0;
@@ -59,6 +62,7 @@ void cubes_add_face_x1(t_object *self, double x, double y_min, double y_max, dou
     if (cubes->n_x1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x, x, y_min, y_max, z_min, z_max);
         face = &cubes->face_x1[cubes->n_x1];
         cubes->n_x1 += 1;
         face->type = F_X;
@@ -80,6 +84,7 @@ void cubes_add_face_xm1(t_object *self, double x, double y_min, double y_max, do
     if (cubes->n_xm1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x, x, y_min, y_max, z_min, z_max);
         face = &cubes->face_xm1[cubes->n_xm1];
         cubes->n_xm1 += 1;
         face->type = F_X;
@@ -101,6 +106,7 @@ void cubes_add_face_y1(t_object *self, double y, double x_min, double x_max, dou
     if (cubes->n_y1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x_min, x_max, y, y, z_min, z_max);
         face = &cubes->face_y1[cubes->n_y1];
         cubes->n_y1 += 1;
         face->type = F_Y;
@@ -121,6 +127,7 @@ void cubes_add_face_ym1(t_object *self, double y, double x_min, double x_max, do
     if (cubes->n_ym1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x_min, x_max, y, y, z_min, z_max);
         face = &cubes->face_ym1[cubes->n_ym1];
         cubes->n_ym1 += 1;
         face->type = F_Y;
@@ -142,6 +149,7 @@ void cubes_add_face_z1(t_object *self, double z, double x_min, double x_max, dou
     if (cubes->n_z1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x_min, x_max, y_min, y_max, z, z);
         face = &cubes->face_z1[cubes->n_z1];
         cubes->n_z1 += 1;
         face->type = F_Z;
@@ -162,6 +170,7 @@ void cubes_add_face_zm1(t_object *self, double z, double x_min, double x_max, do
     if (cubes->n_zm1 < cubes->n_max)
     {
         t_face *face;
+        object_update_bounding_box(self, x_min, x_max, y_min, y_max, z, z);
         face = &cubes->face_zm1[cubes->n_zm1];
         cubes->n_zm1 += 1;
         face->type = F_Z;

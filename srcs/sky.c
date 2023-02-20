@@ -9,6 +9,7 @@ t_object *object_new_sky(t_color horizon, t_color azimut)
     t_sky *sky;
     object = malloc(sizeof(t_object));
     object->type = O_Sky;
+    object_init(object);
     sky = malloc(sizeof(t_sky));
     color_setc(&sky->horizon, &horizon);
     color_setc(&sky->azimut, &azimut);
