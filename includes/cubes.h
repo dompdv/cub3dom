@@ -44,6 +44,8 @@ typedef struct s_cubes
 t_object *object_new_cubes(int n_max_faces);
 void cubes_free(t_object *self);
 
+int cubes_empty(t_object *self);
+
 void cubes_add_face_x1(t_object *self, double y_min, double y_max, double z_min, double z_max, double x, t_color *color);
 void cubes_add_face_xm1(t_object *self, double x, double y_min, double y_max, double z_min, double z_max, t_color *color);
 void cubes_add_face_y1(t_object *self, double y, double x_min, double x_max, double z_min, double z_max, t_color *color);

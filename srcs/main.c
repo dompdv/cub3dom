@@ -100,6 +100,7 @@ int monitor_input(int key, t_world *world)
 		camera_turn(&world->camera, -rot_rad);
 	if (key == XK_Escape)
 		exit_cub3d(world);
+	//	camera_print(&world->camera);
 	return (0);
 }
 
@@ -141,13 +142,13 @@ void add_cube(t_object *cubes, int x, int y, int type_cube, int *map, int x_min,
 	}
 	double p_x = (double)x;
 	double p_y = (double)y;
-	if (x >= (x_max - 1) || map[(h - 1 - y) * w + x + 1] == 0)
+	if (x >= (x_max) || map[(h - 1 - y) * w + x + 1] == 0)
 		cubes_add_face_x1(cubes, p_x + 1, p_y, p_y + 1, 0, 1, &color_face1);
-	if (x > x_min || map[(h - 1 - y) * w + x - 1] == 0)
+	if (x >= x_min || map[(h - 1 - y) * w + x - 1] == 0)
 		cubes_add_face_xm1(cubes, p_x, p_y, p_y + 1, 0, 1, &color_face1);
-	if (y < (y_max - 1) || map[(h - 1 - y - 1) * w + x] == 0)
+	if (y <= (y_max) || map[(h - 1 - y - 1) * w + x] == 0)
 		cubes_add_face_y1(cubes, p_y + 1, p_x, p_x + 1, 0, 1, &color_face2);
-	if (y > y_min || map[(h - y) * w + x] == 0)
+	if (y >= y_min || map[(h - y) * w + x] == 0)
 		cubes_add_face_ym1(cubes, p_y, p_x, p_x + 1, 0, 1, &color_face2);
 }
 
@@ -212,7 +213,7 @@ int main(void)
 	t_color color_face1, color_face2;
 	color_set(&color_face1, 140, 0, 0);
 	color_set(&color_face2, 0, 140, 0);
-	int slice = 2;
+	int slice = 3;
 	int w, h;
 	w = mapWidth / slice;
 	h = mapHeight / slice;
@@ -235,24 +236,18 @@ int main(void)
 		}
 	}
 
-	printf("Sky\n");
-	object_print(sky);
-	printf("Floor\n");
-	object_print(floor);
-
 	world.scene = object_new_container(2 + slice * slice);
-	printf("Container\n");
-	object_print(world.scene);
-	printf("Cubes\n");
 	for (int i = 0; i < slice * slice; i++)
 	{
-		object_print(area_cubes[i]);
-		container_add(world.scene, area_cubes[i]);
+		if (!cubes_empty(area_cubes[i]))
+		{
+			object_print(area_cubes[i]);
+			container_add(world.scene, area_cubes[i]);
+		}
 	}
-	object_print(world.scene);
 	container_add(world.scene, floor);
-	object_print(world.scene);
 	container_add(world.scene, sky);
+
 	object_print(world.scene);
 	free(area_cubes);
 

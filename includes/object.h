@@ -21,8 +21,6 @@ typedef enum
 typedef struct s_object
 {
     Object_types type;
-    // Englobing == 1 => we can use the bounding box to check if we hit the bounding box before testing the inside
-    int englobing;
     // Bounding box (some objects are not bounded, like Sky or Floor)
     int bounded;
     double x_min, x_max, y_min, y_max, z_min, z_max;

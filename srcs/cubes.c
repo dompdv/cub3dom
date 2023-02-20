@@ -11,7 +11,6 @@ t_object *object_new_cubes(int n_max_faces)
     object_init(object);
     object->type = O_Cubes;
     object->bounded = 1;
-    object->englobing = 1;
     cubes = malloc(sizeof(t_cubes));
     cubes->n_max = n_max_faces;
     cubes->n_x1 = 0;
@@ -42,6 +41,11 @@ void cubes_free(t_object *self)
     free(self->cubes->face_zm1);
     free(self->cubes);
     free(self);
+}
+
+int cubes_empty(t_object *self)
+{
+    return (self->cubes->n_x1 + self->cubes->n_xm1 + self->cubes->n_y1 + self->cubes->n_ym1 + self->cubes->n_z1 + self->cubes->n_zm1) == 0;
 }
 
 void order(double *a, double *b)

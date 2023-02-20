@@ -13,7 +13,6 @@ t_object *object_new_container(int n_max_objects)
     object_init(object);
     // A priori, the container is bounded and englobing
     object->bounded = 1;
-    object->englobing = 1;
 
     container = malloc(sizeof(t_container));
     container->n_max = n_max_objects;
@@ -54,7 +53,6 @@ void container_add(t_object *self, t_object *o)
             {
                 // If we add an unbounded object, then the container is unbounded
                 self->bounded = 0;
-                self->englobing = 0;
             }
         }
     }
