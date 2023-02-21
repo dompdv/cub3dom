@@ -213,7 +213,7 @@ int main(void)
 	t_color color_face1, color_face2;
 	color_set(&color_face1, 140, 0, 0);
 	color_set(&color_face2, 0, 140, 0);
-	int slice = 3;
+	int slice = 4;
 	int w, h;
 	w = mapWidth / slice;
 	h = mapHeight / slice;
@@ -236,13 +236,25 @@ int main(void)
 		}
 	}
 
-	world.scene = object_new_container(2 + slice * slice);
+	world.scene = object_new_container(2 + 4);
+	t_object *sub_container[4];
+	for (int i = 0; i < 4; i++)
+	{
+		sub_container[i] = object_new_container(slice * slice);
+		container_add(world.scene, sub_container[i]);
+	}
+
 	for (int i = 0; i < slice * slice; i++)
 	{
 		if (!cubes_empty(area_cubes[i]))
 		{
-			object_print(area_cubes[i]);
-			container_add(world.scene, area_cubes[i]);
+			int c_i = 0;
+			if (i >= (slice * slice / 2))
+				c_i += 2;
+
+			if (i % slice >= slice)
+				c_i += 1;
+			container_add(sub_container[c_i], area_cubes[i]);
 		}
 	}
 	container_add(world.scene, floor);
