@@ -80,6 +80,22 @@ void color_gradient(t_color *c, t_color *c2, double t)
     c->b = (int)(t * (double)c->b + (1 - t) * (double)c2->b);
 }
 
+int color_blend(int color1, int color2)
+{
+    int r1, r2;
+    int g1, g2;
+    int b1, b2;
+
+    r1 = (color1 >> 16 & 0xFF);
+    g1 = (color1 >> 8 & 0xFF);
+    b1 = (color1 & 0xFF);
+    r2 = (color2 >> 16 & 0xFF);
+    g2 = (color2 >> 8 & 0xFF);
+    b2 = (color2 & 0xFF);
+
+    return (((r1 + r2) / 2) << 16 | ((g1 + g2) / 2) << 8 | ((b1 + b2) / 2));
+}
+
 void color_print(t_color *c)
 {
     printf("rgb=(%d,%d,%d)\n", c->r, c->g, c->b);
