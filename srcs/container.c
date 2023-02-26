@@ -46,14 +46,10 @@ void container_add(t_object *self, t_object *o)
         if (self->bounded)
         {
             if (o->bounded)
-            {
                 object_update_bounding_box_o(self, o);
-            }
             else
-            {
                 // If we add an unbounded object, then the container is unbounded
                 self->bounded = 0;
-            }
         }
     }
 }
@@ -62,7 +58,5 @@ void container_cast_ray(t_object *self, t_hit *hit, t_vect *eye, t_vect *dir_n, 
 {
     // Testing is impact with each contained object is closer to the previous one
     for (int i = 0; i < self->container->n; i++)
-    {
         object_cast_ray(self->container->objects[i], hit, eye, dir_n, dist_min);
-    }
 }

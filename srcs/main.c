@@ -31,7 +31,7 @@ int worldMap[mapWidth][mapHeight] =
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+		{1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
 		{1, 4, 4, 4, 4, 4, 4, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
@@ -100,7 +100,6 @@ int monitor_input(int key, t_world *world)
 		camera_turn(&world->camera, -rot_rad);
 	if (key == XK_Escape)
 		exit_cub3d(world);
-	//	camera_print(&world->camera);
 	return (0);
 }
 
@@ -220,9 +219,7 @@ int main(void)
 	t_object **area_cubes;
 	area_cubes = malloc(slice * slice * sizeof(t_object));
 	for (int i = 0; i < slice * slice; i++)
-	{
 		area_cubes[i] = object_new_cubes(mapWidth * mapHeight / (slice * slice));
-	}
 	for (int ac = 0; ac < slice; ac++)
 	{
 		for (int ar = 0; ar < slice; ar++)
