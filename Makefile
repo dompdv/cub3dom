@@ -7,21 +7,24 @@ HEADERS= includes/cub3d.h
 
 CC= clang
 
-CFLAGS= -Wall -Wextra -g3 
+CFLAGS= -Wall -Wextra -g3
+
+X11_INC = /usr/X11/include
+X11_LIB = /usr/X11/lib
 
 LIBFT= -L libft -lft
 
-VALGRIND = colour-valgrind 
+VALGRIND = colour-valgrind
 
-MLX            = mlx/libmlx.a mlx/libmlx_Darwin.a 
+MLX = mlx/libmlx.a
 
-all: 		lib ${NAME} 
+all: 		lib ${NAME}
 
 ${NAME}: 	${OBJS}
-				${CC} ${CFLAGS} -L /usr/lib ${OBJS} ${LIBFT} ${MLX} -lXext -lX11 -lm -lz -o ${NAME}
+				${CC} ${CFLAGS} ${OBJS} ${LIBFT} ${MLX} -L${X11_LIB} -lXext -lX11 -lm -lz -o ${NAME}
 
 .c.o:
-				${CC} ${CFLAGS} -I/usr/include -I${HEADERS} -Imlx -O3 -c $< -o $@
+				${CC} ${CFLAGS} -I${X11_INC} -Iincludes -Imlx -O3 -c $< -o $@
 
 lib:
 				make -C libft
@@ -35,7 +38,7 @@ clean:
 fclean:clean
 				rm -f ${NAME}
 							make -C libft fclean
-							make -C mlx fclean
+							make -C mlx clean
 
 re:fclean all
 

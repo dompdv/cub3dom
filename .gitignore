@@ -56,5 +56,4 @@ todo.md
 file
 *.pdf
 tests/
-*.md
 cub3D
